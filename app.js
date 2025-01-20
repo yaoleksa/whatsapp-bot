@@ -68,7 +68,7 @@ client.on('message_create', msg => {
       auth: auth
     });
     const spreadsheetId = "10c2LcK-k15AaXHTF5ZnyvNGYp6hGvUd4AyChqmT0hF4";
-    const initialRange = "Data!A:A";
+    const initialRange = "WhatsApp!A:A";
     const valueInputOption = "RAW";
     const values = [
       [msg.body]
@@ -83,9 +83,9 @@ client.on('message_create', msg => {
     }).then(content => {
       let range;
       if(content.data.values) {
-        range = `Data!A${content.data.values.length + 1}`;
+        range = `WhatsApp!A${content.data.values.length + 1}`;
       } else {
-        range = 'Data!A1';
+        range = 'WhatsApp!A1';
       }
       sheets.spreadsheets.values.update({spreadsheetId, range, valueInputOption, resource});
     });
