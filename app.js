@@ -6,6 +6,7 @@ const process = require('process');
 const fs = require('fs').promises;
 const path = require('path');
 
+// Define the scope which allows edit sheets
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
@@ -75,6 +76,7 @@ client.on('message_create', msg => {
     const resource = {
       values,
     }
+    // First of all, we get the last filled cell in the column, to do it we make a get API call and fetch the  length content property
     sheets.spreadsheets.values.get({
       spreadsheetId: spreadsheetId,
       range: initialRange
@@ -88,7 +90,7 @@ client.on('message_create', msg => {
       sheets.spreadsheets.values.update({spreadsheetId, range, valueInputOption, resource});
     });
   }).catch(console.error);
-  console.log(msg.body);
+  console.log(msg);
 });
 
 client.initialize();
