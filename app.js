@@ -67,7 +67,7 @@ client.on('message_create', msg => {
       auth: auth
     });
     const spreadsheetId = "10c2LcK-k15AaXHTF5ZnyvNGYp6hGvUd4AyChqmT0hF4";
-    const range = "Data!A:A";
+    const initialRange = "Data!A:A";
     const valueInputOption = "RAW";
     const values = [
       [msg.body]
@@ -75,7 +75,18 @@ client.on('message_create', msg => {
     const resource = {
       values,
     }
-    sheets.spreadsheets.values.update({spreadsheetId, range, valueInputOption, resource});
+    sheets.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: initialRange
+    }).then(content => {
+      let range;
+      if(content.data.values) {
+        range = `Data!A${content.data.values.length + 1}`;
+      } else {
+        range = 'Data!A1';
+      }
+      sheets.spreadsheets.values.update({spreadsheetId, range, valueInputOption, resource});
+    });
   }).catch(console.error);
   console.log(msg.body);
 });
