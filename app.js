@@ -59,9 +59,10 @@ client.once("ready", () => {
 });
 
 client.on("qr", qr => {
-  qcode.generate(qr, {
-      small: true
-  });
+  console.log(qr);
+  // qcode.generate(qr, {
+  //     small: true
+  // });
 });
 
 client.on('message_create', msg => {
