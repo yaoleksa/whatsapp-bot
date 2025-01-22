@@ -74,7 +74,7 @@ client.on('message_create', msg => {
     const initialRange = process.env.INITIAL_RANGE;
     const valueInputOption = process.env.VALUE_INPUT_OPTION;
     const values = [
-      [msg.body]
+      [msg.from, msg.to, msg.body]
     ];
     const resource = {
       values,
@@ -86,14 +86,14 @@ client.on('message_create', msg => {
     }).then(content => {
       let range;
       if(content.data.values) {
-        range = `WhatsApp!A${content.data.values.length + 1}`;
+        range = `WhatsApp!A${content.data.values.length + 1}:C${content.data.values.length + 1}`;
       } else {
-        range = 'WhatsApp!A1';
+        range = 'WhatsApp!A2:C2';
       }
       sheets.spreadsheets.values.update({spreadsheetId, range, valueInputOption, resource});
     });
   }).catch(console.error);
-  console.log(msg);
+  // console.log(msg);
 });
 
 client.initialize();
