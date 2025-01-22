@@ -1,3 +1,6 @@
+// Make environment variables available
+require('dotenv').config();
+
 const {authenticate} = require('@google-cloud/local-auth');
 const { Client } = require('whatsapp-web.js');
 const qcode = require('qrcode-terminal');
@@ -67,9 +70,9 @@ client.on('message_create', msg => {
       version: 'v4',
       auth: auth
     });
-    const spreadsheetId = "10c2LcK-k15AaXHTF5ZnyvNGYp6hGvUd4AyChqmT0hF4";
-    const initialRange = "WhatsApp!A:A";
-    const valueInputOption = "RAW";
+    const spreadsheetId = process.env.SPREADSHEET_ID;
+    const initialRange = process.env.INITIAL_RANGE;
+    const valueInputOption = process.env.VALUE_INPUT_OPTION;
     const values = [
       [msg.body]
     ];
