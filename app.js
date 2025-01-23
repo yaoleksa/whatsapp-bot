@@ -8,6 +8,10 @@ const {google} = require('googleapis');
 const process = require('process');
 const fs = require('fs').promises;
 const path = require('path');
+const http = require('http');
+
+// define port for server
+const port = 3000 || process.env.PORT;
 
 // Define the scope which allows edit sheets
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
@@ -59,9 +63,10 @@ client.once("ready", () => {
 });
 
 client.on("qr", qr => {
-  qcode.generate(qr, {
-      small: true
-  });
+  console.log(qr);
+  // qcode.generate(qr, {
+  //     small: true
+  // });
 });
 
 client.on('message_create', msg => {
@@ -97,3 +102,8 @@ client.on('message_create', msg => {
 });
 
 client.initialize();
+
+// initialize server for stable work
+http.createServer((req, res) => {}).listen(port, () => {
+  console.log(`http://localhost:${port}`);
+});
