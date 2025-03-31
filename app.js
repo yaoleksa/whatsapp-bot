@@ -8,10 +8,6 @@ const {google} = require('googleapis');
 const process = require('process');
 const fs = require('fs').promises;
 const path = require('path');
-const http = require('http');
-
-// define port for server
-const port = 3000 || process.env.PORT;
 
 // Define the scope which allows edit sheets
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
@@ -63,47 +59,43 @@ client.once("ready", () => {
 });
 
 client.on("qr", qr => {
-  console.log(qr);
-  // qcode.generate(qr, {
-  //     small: true
-  // });
+  qcode.generate(qr, {
+      small: true
+  });
 });
 
-client.on('message_create', msg => {
-  authorize().then(auth => {
-    const sheets = google.sheets({
-      version: 'v4',
-      auth: auth
-    });
-    const spreadsheetId = process.env.SPREADSHEET_ID;
-    const initialRange = process.env.INITIAL_RANGE;
-    const valueInputOption = process.env.VALUE_INPUT_OPTION;
-    const values = [
-      [msg.from, msg.to, msg.body]
-    ];
-    const resource = {
-      values,
+client.on('message_create', async msg => {
+  const auth = await authorize();
+  const sheets = google.sheets({
+    version: 'v4',
+    auth: auth
+  });
+  const spreadsheetId = process.env.SPREADSHEET_ID;
+  const initialRange = process.env.INITIAL_RANGE;
+  const valueInputOption = process.env.VALUE_INPUT_OPTION;
+  const values = [
+    [msg.from, msg.to, msg.body]
+  ];
+  const resource = {
+    values,
+  }
+  // First of all, we get the last filled cell in the column, to do it we make a get API call and fetch the  length content property
+  sheets.spreadsheets.values.get({
+    spreadsheetId: spreadsheetId,
+    range: initialRange
+  }).then(content => {
+    let range;
+    if(content.data.values) {
+      range = `WhatsApp!A${content.data.values.length + 1}:C${content.data.values.length + 1}`;
+    } else {
+      range = 'WhatsApp!A2:C2';
     }
-    // First of all, we get the last filled cell in the column, to do it we make a get API call and fetch the  length content property
-    sheets.spreadsheets.values.get({
-      spreadsheetId: spreadsheetId,
-      range: initialRange
-    }).then(content => {
-      let range;
-      if(content.data.values) {
-        range = `WhatsApp!A${content.data.values.length + 1}:C${content.data.values.length + 1}`;
-      } else {
-        range = 'WhatsApp!A2:C2';
-      }
-      sheets.spreadsheets.values.update({spreadsheetId, range, valueInputOption, resource});
-    });
-  }).catch(console.error);
-  // console.log(msg);
+    sheets.spreadsheets.values.update({spreadsheetId, range, valueInputOption, resource});
+  });
+});
+
+client.on('message_edit', async msg => {
+  console.log(msg);
 });
 
 client.initialize();
-
-// initialize server for stable work
-http.createServer((req, res) => {}).listen(port, () => {
-  console.log(`http://localhost:${port}`);
-});
