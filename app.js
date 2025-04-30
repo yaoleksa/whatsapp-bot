@@ -16,7 +16,6 @@ const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
 
 // Define global consts
 const spreadsheetId = process.env.SPREADSHEET_ID;
-const initialRange = process.env.INITIAL_RANGE;
 const valueInputOption = process.env.VALUE_INPUT_OPTION;
 
 async function loadSavedCredentialsIfExist() {
@@ -57,7 +56,7 @@ async function authorize() {
     return client;
   }
 
-async function getValues() {
+async function getValues(requestedRange) {
   const auth = await authorize();
   const sheets = google.sheets({
     version: 'v4',
@@ -65,7 +64,7 @@ async function getValues() {
   });
   return await sheets.spreadsheets.values.get({
     spreadsheetId: spreadsheetId,
-    range: initialRange
+    range: requestedRange
   });
 }
 
@@ -88,18 +87,18 @@ client.on('message_create', async msg => {
     auth: auth
   });
   const values = [
-    [msg.id.id, msg.from, msg.to, msg.body]
+    [msg.id.id, msg.timestamp, msg.from, msg.to, msg.body]
   ];
   const resource = {
     values,
   }
   // First of all, we get the last filled cell in the column, to do it we make a get API call and fetch the  length content property
-  getValues().then(content => {
+  getValues('WhatsApp!A:A').then(content => {
     let range;
     if(content.data.values) {
-      range = `WhatsApp!A${content.data.values.length + 1}:D${content.data.values.length + 1}`;
+      range = `WhatsApp!A${content.data.values.length + 1}:E${content.data.values.length + 1}`;
     } else {
-      range = 'WhatsApp!A2:D2';
+      range = 'WhatsApp!A2:E2';
     }
     sheets.spreadsheets.values.update({spreadsheetId, range, valueInputOption, resource});
   });
@@ -112,14 +111,14 @@ client.on('message_edit', async msg => {
     auth: auth
   });
   const values = [
-    [msg.id.id, msg.from, msg.to, msg.body]
+    [msg.id.id, msg.timestamp, msg.from, msg.to, msg.body]
   ];
   const resource = {
     values,
   }
-  getValues().then(content => {
+  getValues('WhatsApp!A:A').then(content => {
     const updatedMessageIndex = content.data.values.flat().indexOf(msg.id.id) + 1;
-    const range = `WhatsApp!A${updatedMessageIndex}:D${updatedMessageIndex}`;
+    const range = `WhatsApp!A${updatedMessageIndex}:E${updatedMessageIndex}`;
     sheets.spreadsheets.values.update({spreadsheetId, range, valueInputOption, resource});
   });
 });
@@ -136,9 +135,9 @@ client.on('message_revoke_everyone', async msg => {
   const resource = {
     values,
   }
-  getValues().then(content => {
-    const updatedMessageIndex = content.data.values.flat().indexOf(msg.id.id) > 0 ? content.data.values.flat().indexOf(msg.id.id) : content.data.values.length - 1;
-    const range = `WhatsApp!A${updatedMessageIndex}:D${updatedMessageIndex}`;
+  getValues('WhatsApp!B:B').then(content => {
+    const deletedtedMessageIndex = content.data.values.flat().indexOf(msg.timestamp.toString());
+    // Revoke entire row from sheet
     sheets.spreadsheets.batchUpdate({
       spreadsheetId: spreadsheetId,
       resource: {
@@ -148,8 +147,8 @@ client.on('message_revoke_everyone', async msg => {
               "range": {
                 "sheetId": 0,
                 "dimension": "ROWS",
-                "startIndex": updatedMessageIndex,
-                "endIndex": updatedMessageIndex + 1
+                "startIndex": deletedtedMessageIndex,
+                "endIndex": deletedtedMessageIndex + 1
               }
             }
           }
