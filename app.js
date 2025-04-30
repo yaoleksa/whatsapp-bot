@@ -135,7 +135,7 @@ client.on('message_revoke_everyone', async msg => {
   const resource = {
     values,
   }
-  getValues('WhatsApp!B:B').then(content => {
+  getValues('WhatsApp!B:B').then(async content => {
     const deletedtedMessageIndex = content.data.values.flat().indexOf(msg.timestamp.toString());
     // Revoke entire row from sheet
     sheets.spreadsheets.batchUpdate({
