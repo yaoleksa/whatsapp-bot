@@ -6,3 +6,8 @@ There are few moments which are crucial for that integration
 > sudo apt-get install -y nodejs  
 > - whatsapp-web.js is an unofficial, open-source library that isn't made by WhatsApp or affiliated with it in any way  
 > - You must use v20.10.0 version of node to use whatsapp-web.js library  
+
+>[!NOTE]
+> - You should get to know with [Google Sheets API](https://developers.google.com/workspace/sheets/api/guides/values). Especialy with read & write operations
+
+# USE GUIDE
