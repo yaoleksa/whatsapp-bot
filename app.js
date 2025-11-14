@@ -11,7 +11,7 @@ client.on('qr', (qr) => {
 });
 
 client.on('message_create', (msg) => {
-    axios.post('https://script.google.com/macros/s/AKfycbxReWuxqzO-QceqSUgN62FGriqMBHSpi1MMpGDA1HJTq_HVQczF0tpMslgSZiCveIlE/exec', {
+    axios.post('https://script.google.com/macros/s/AKfycbzi4gUi2de_5F4JFbZLwttFzdcqnnmOtrQl98SVVa06E_pMibD7U6t9uMCLN_izZzAB/exec', {
         'body': msg.body
     }, {
         'Content-Type': 'application/json',
