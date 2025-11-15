@@ -15,18 +15,22 @@ client.on('qr', (qr) => {
 });
 
 client.on('message_create', (msg) => {
-    axios.post(`https://script.google.com/macros/s/${process.env.ACTIVATION_ID}/exec`, {
-        'time': msg.timestamp,
-        'from': msg.from,
-        'to': msg.to,
-        'body': msg.body
-    }, {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer your_auth_token_here',
-        'X-Custom-Header': 'my-custom-value'
-    }).then(res => {
-        console.log(res);
-    })
+    if(msg.body) {
+        axios.post(`https://script.google.com/macros/s/${process.env.ACTIVATION_ID}/exec`, {
+            'time': msg.timestamp,
+            'from': msg.from,
+            'to': msg.to,
+            'body': msg.body
+        }, {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer your_auth_token_here',
+            'X-Custom-Header': 'my-custom-value'
+        }).then(res => {
+            console.log(`Response status: ${res.status}`);
+        });
+    } else {
+        console.log('empty message');
+    }
 })
 
 client.initialize();
