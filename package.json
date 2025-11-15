@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
     "whatsapp-web.js": "^1.34.2"
   },
   "name": "whatsapp-bot",
