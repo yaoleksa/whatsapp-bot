@@ -2,10 +2,24 @@
 require('dotenv').config();
 
 // Enable required packages
-const { Client } = require('whatsapp-web.js');
+const { Client, NoAuth } = require('whatsapp-web.js');
 const { default: axios } = require('axios');
-const client = new Client();
-const ID = 'AKfycbzLKiYidUljg7P8u7aWd8Myd2y3TLsKHZhT3lbldDjKvh3In-0ghxSuL2rQkOQGzpnA';
+const client = new Client({
+    authStrategy: new NoAuth(),
+    puppeteer: {
+        headless: true,
+        userDataDir: null,
+        args: [
+            `--remote-debugging-port=${process.env.PORT || 10000}`,
+            '--disable-cache',
+            '--disable-application-cache',
+            '--disk-cache-size=0',
+            '--aggressive-cache-discard',
+            '--disable-dev-shm-usage'
+        ]
+    }
+});
+// Define logic when the entry point is ready
 client.once('ready', () => {
     console.log('is ready');
 });
