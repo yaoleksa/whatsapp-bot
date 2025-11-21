@@ -6,6 +6,9 @@ const { Client, NoAuth } = require('whatsapp-web.js');
 const { default: axios } = require('axios');
 const client = new Client({
     authStrategy: new NoAuth(),
+    webVersionCache: {
+        type: 'none'
+    },
     puppeteer: {
         headless: true,
         userDataDir: null,
