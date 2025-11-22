@@ -13,7 +13,8 @@ const client = new Client({
         headless: true,
         userDataDir: null,
         args: [
-            `--remote-debugging-port=${process.env.PORT || 10000}`,
+            '--remote-debugging-port=10000',
+            '--remote-debugging-address=0.0.0.0',
             '--disable-cache',
             '--disable-application-cache',
             '--disk-cache-size=0',
