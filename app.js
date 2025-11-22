@@ -2,13 +2,11 @@
 require('dotenv').config();
 
 // Enable required packages
-const { Client, NoAuth } = require('whatsapp-web.js');
+const { Client } = require('whatsapp-web.js');
 const { default: axios } = require('axios');
 const client = new Client({
-    authStrategy: new NoAuth(),
     webVersionCache: {
-        type: 'remote',
-        remotePath: 'https://raw.githubusercontent.com/yaoleksa/whatsapp-bot/refs/heads/master/web-cache/2.3000.1030274078.html'
+        type: 'none'
     },
     puppeteer: {
         headless: true,
