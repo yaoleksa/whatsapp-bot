@@ -7,7 +7,7 @@ const { default: axios } = require('axios');
 const client = new Client({
     authStrategy: new NoAuth(),
     webVersionCache: {
-        type: 'none'
+        type: 'local'
     },
     puppeteer: {
         headless: true,
