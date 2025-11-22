@@ -2,9 +2,10 @@
 require('dotenv').config();
 
 // Enable required packages
-const { Client } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const { default: axios } = require('axios');
 const client = new Client({
+    authStrategy: new LocalAuth(),
     webVersionCache: {
         type: 'none'
     },
