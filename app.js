@@ -7,7 +7,8 @@ const { default: axios } = require('axios');
 const client = new Client({
     authStrategy: new NoAuth(),
     webVersionCache: {
-        type: 'local'
+        type: 'remote',
+        remotePath: 'https://raw.githubusercontent.com/yaoleksa/whatsapp-bot/refs/heads/master/web-cache/2.3000.1030274078.html'
     },
     puppeteer: {
         headless: true,
