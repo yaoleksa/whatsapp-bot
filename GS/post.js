@@ -5,7 +5,7 @@ function doPost(event) {
   whatsApp.getRange(`A${lastFilledRow}:E${lastFilledRow}`).setValues([
     [
       lastFilledRow - 1,
-      data.time,
+      new Date(Date(data.time)).toISOString(),
       data.from,
       data.to,
       data.body.toString()
