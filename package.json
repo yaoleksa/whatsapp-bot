@@ -1,7 +1,10 @@
 {
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.940.0",
+    "adm-zip": "^0.5.16",
     "axios": "^1.13.2",
     "dotenv": "^17.2.3",
+    "fs-extra": "^11.3.2",
     "whatsapp-web.js": "^1.34.2"
   },
   "name": "whatsapp-bot",
@@ -40,7 +43,6 @@
     "fd-slicer": "^1.1.0",
     "fluent-ffmpeg": "^2.1.3",
     "fs-constants": "^1.0.0",
-    "fs-extra": "^10.1.0",
     "fs.realpath": "^1.0.0",
     "fstream": "^1.0.12",
     "get-stream": "^5.2.0",
