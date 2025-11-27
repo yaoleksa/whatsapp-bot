@@ -6,11 +6,7 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const { default: axios } = require('axios');
 
 const client = new Client({
-    authStrategy: new LocalAuth({
-        clientId: 'wweb-bot',
-        dataPath: 'tmp/.remoteAuth',
-        rmMaxRetries: 2
-    }),
+    authStrategy: new LocalAuth(),
     authTimeoutMs: 0,
     webVersionCache: {
         type: 'remote',
