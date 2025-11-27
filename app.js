@@ -24,7 +24,6 @@ const client = new Client({
     },
     puppeteer: {
         headless: true,
-        userDataDir: null,
         args: [
             '--remote-debugging-port=10000',
             '--remote-debugging-address=0.0.0.0',
