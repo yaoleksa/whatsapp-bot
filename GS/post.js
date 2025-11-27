@@ -4,8 +4,8 @@ function doPost(event) {
   const data = JSON.parse(event.postData.contents);
   whatsApp.getRange(`A${lastFilledRow}:E${lastFilledRow}`).setValues([
     [
-      lastFilledRow,
-      Date(data.time),
+      lastFilledRow - 1,
+      new Date(data.time).toISOString(),
       data.from,
       data.to,
       data.body.toString()
