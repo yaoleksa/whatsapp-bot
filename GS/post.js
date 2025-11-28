@@ -2,10 +2,12 @@ function doPost(event) {
   const whatsApp = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("WhatsApp");
   const lastFilledRow = whatsApp.getRange("A:A").getValues().filter(e => e != '').length + 1;
   const data = JSON.parse(event.postData.contents);
+  // date constants to construct local DateTime string
+  const date = new Date(Date(data.time));
   whatsApp.getRange(`A${lastFilledRow}:E${lastFilledRow}`).setValues([
     [
       lastFilledRow - 1,
-      new Date(Date(data.time)).toISOString(),
+      `${date.toLocaleDateString()}T${date.toLocaleTimeString()}`,
       data.from,
       data.to,
       data.body.toString()
