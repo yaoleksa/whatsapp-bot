@@ -45,6 +45,10 @@ client.on('qr', (qr) => {
     console.log(qr);
 });
 
+client.on('remote_session_saved', () => {
+    console.log('session has been saved');
+})
+
 client.on('message_create', (msg) => {
     if(msg.body) {
         axios.post(`https://script.google.com/macros/s/${process.env.ACTIVATION_ID}/exec`, {

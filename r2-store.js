@@ -23,14 +23,14 @@ module.exports = class R2Store {
         });
     }
 
-    _keyFor(session) {
-        const id = session || 'default';
+    _keyFor(clientId) {
+        const id = clientId || 'default';
         return `wwebjs-sessions/${id}.zip`;
     }
 
     // return boolean
-    async sessionExists({ session }) {
-        const Key = this._keyFor(session);
+    async sessionExists({ clientId }) {
+        const Key = this._keyFor(clientId);
         try {
             await this.s3.send(new HeadObjectCommand({
                 Bucket: this.bucket,
@@ -46,22 +46,22 @@ module.exports = class R2Store {
         }
     }
 
-    async save({ session, zipBuffer }) {
+    async save({ clientId, zipBuffer }) {
         if(!zipBuffer) {
             console.warn('R2Store.save: zipBuffer is missing');
             return null;
         }
-        const Key = this._keyFor(session);
-        await this.s3.bucket.send(new PutObjectCommand({
+        const Key = this._keyFor(clientId);
+        await this.s3.send(new PutObjectCommand({
             Bucket: this.bucket,
             Key,
             Body: zipBuffer
         }));
     }
 
-    async extract({ session, destPath }) {
-        const Key = this._keyFor(session);
-        const resp = await this.s3.bucket.send(new GetObjectCommand({
+    async extract({ clientId, destPath }) {
+        const Key = this._keyFor(clientId);
+        const resp = await this.s3.send(new GetObjectCommand({
             Bucket: this.bucket,
             Key
         }));
@@ -77,14 +77,14 @@ module.exports = class R2Store {
 
         await fs.remove(destPath);
         await fs.ensureDir(destPath);
-        const zip = AdmZip(tmpFile);
+        const zip = new AdmZip(tmpFile);
         // extract to destPath. IMPORTANT: the zip must contain the proper profile structure
         zip.extractAllTo(destPath, true);
         await fs.remove(tmpFile);
     }
 
-    async delete({ session }) {
-        const Key = this._keyFor(session);
+    async delete({ clientId }) {
+        const Key = this._keyFor(clientId);
         try {
             await this.s3.send(new DeleteObjectCommand({
                 Bucket: this.bucket,
