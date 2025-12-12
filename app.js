@@ -2,23 +2,11 @@
 require('dotenv').config();
 
 // Enable required packages
-const { Client, RemoteAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const { default: axios } = require('axios');
-const R2Store = require('./r2-store.js');
 
 const client = new Client({
-    authStrategy: new RemoteAuth({
-        store: new R2Store({
-            bucket: process.env.CF_BUCKET,
-            endpoint: process.env.CF_ENDPOINT,
-            accessKeyId: process.env.CF_ACCESS_KEY_ID,
-            secretAccessKey: process.env.CF_SECRET_ACCESS_KEY,
-            forcePathStyle: false
-        }),
-        clientId: process.env.CF_ACCOUNT_ID,
-        backupSyncIntervalMs: 120000
-    }),
-    authTimeoutMs: 0,
+    authStrategy: new LocalAuth(),
     webVersionCache: {
         type: 'remote',
         remotePath: 'https://raw.githubusercontent.com/yaoleksa/whatsapp-bot/refs/heads/master/web-cache/2.3000.1030274078.html'
