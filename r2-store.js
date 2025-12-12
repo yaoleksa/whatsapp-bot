@@ -46,7 +46,8 @@ module.exports = class R2Store {
         }
     }
 
-    async save({ clientId, zipBuffer }) {
+    async save({ clientId, data }) {
+        const zipBuffer = data;
         if(!zipBuffer) {
             console.warn('R2Store.save: zipBuffer is missing');
             return null;
@@ -57,6 +58,31 @@ module.exports = class R2Store {
             Key,
             Body: zipBuffer
         }));
+    }
+
+    async load({ clientId }) {
+        const Key = this._keyFor(clientId);
+
+        try {
+            const resp = await this.s3.send(new GetObjectCommand({
+                Bucket: this.bucket,
+                Key
+            }));
+
+            // response.Body is a stream → convert it to Buffer
+            const chunks = [];
+            for await (const chunk of resp.Body) {
+                chunks.push(chunk);
+            }
+            return Buffer.concat(chunks);
+
+        } catch (err) {
+            const code = err.name || err.$metadata?.httpStatusCode;
+            if (code === 'NotFound' || code === 404) {
+                return null;
+            }
+            throw err;
+        }
     }
 
     async extract({ clientId, destPath }) {
