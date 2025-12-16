@@ -47,8 +47,8 @@ module.exports = class R2Store {
     }
 
     async save({ clientId, data }) {
-        const zipBuffer = data;
-        if(!zipBuffer) {
+        console.log(data);
+        if(!data) {
             console.warn('R2Store.save: zipBuffer is missing');
             return null;
         }
@@ -56,7 +56,7 @@ module.exports = class R2Store {
         await this.s3.send(new PutObjectCommand({
             Bucket: this.bucket,
             Key,
-            Body: zipBuffer
+            Body: data
         }));
     }
 
