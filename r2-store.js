@@ -46,22 +46,21 @@ module.exports = class R2Store {
         }
     }
 
-    async save({ session }) {
-        console.log(session);
-        if(typeof session === 'object') {
-            console.log(JSON.stringify(session));
-        }
+    async save({ clientId, session }) {
         if(!session) {
-            console.warn('R2Store.save: zipBuffer is missing');
-            return null;
+            console.warn("R2Store.save: Invalid path");
+            return;
         }
-        return;
+        const zip = new AdmZip();
+        zip.addLocalFolder(session);
+        const zipBuffer = zip.toBuffer();
         const Key = this._keyFor(clientId);
         await this.s3.send(new PutObjectCommand({
             Bucket: this.bucket,
             Key,
-            Body: data
+            Body: zipBuffer
         }));
+        console.log(`R2Store.save: uploaded ${Key}`);
     }
 
     async load({ clientId }) {
