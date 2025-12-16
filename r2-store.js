@@ -46,12 +46,16 @@ module.exports = class R2Store {
         }
     }
 
-    async save({ clientId, data }) {
-        console.log(data);
-        if(!data) {
+    async save({ session }) {
+        console.log(session);
+        if(typeof session === 'object') {
+            console.log(JSON.stringify(session));
+        }
+        if(!session) {
             console.warn('R2Store.save: zipBuffer is missing');
             return null;
         }
+        return;
         const Key = this._keyFor(clientId);
         await this.s3.send(new PutObjectCommand({
             Bucket: this.bucket,
