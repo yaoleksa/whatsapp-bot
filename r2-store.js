@@ -52,7 +52,7 @@ module.exports = class R2Store {
             return;
         }
         const zip = new AdmZip();
-        zip.addLocalFolder(session);
+        zip.addLocalFolder(session.path);
         const zipBuffer = zip.toBuffer();
         const Key = this._keyFor(clientId);
         await this.s3.send(new PutObjectCommand({
