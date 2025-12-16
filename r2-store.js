@@ -89,6 +89,10 @@ module.exports = class R2Store {
     }
 
     async extract({ clientId, destPath }) {
+        if(!destPath) {
+            console.warn(`R2Store.extract: destPath is undefinded`);
+            return;
+        }
         const Key = this._keyFor(clientId);
         const resp = await this.s3.send(new GetObjectCommand({
             Bucket: this.bucket,
@@ -104,12 +108,13 @@ module.exports = class R2Store {
             write.on('finish', resolve);
         });
 
-        await fs.remove(destPath);
+        // await fs.remove(destPath);
         await fs.ensureDir(destPath);
         const zip = new AdmZip(tmpFile);
         // extract to destPath. IMPORTANT: the zip must contain the proper profile structure
         zip.extractAllTo(destPath, true);
         await fs.remove(tmpFile);
+        console.log(`R2Store.extract: restored session`);
     }
 
     async delete({ clientId }) {
