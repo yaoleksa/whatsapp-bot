@@ -49,7 +49,11 @@ module.exports = class R2Store {
     async save({ clientId, session }) {
         if(!session) {
             console.warn("R2Store.save: Invalid path");
-            return;
+            return 1;
+        }
+        if(!session.path) {
+            console.warn("R2Store.save: the path property is missing");
+            return 2;
         }
         const zip = new AdmZip();
         zip.addLocalFolder(session.path);
