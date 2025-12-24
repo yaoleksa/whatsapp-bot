@@ -52,6 +52,10 @@ module.exports = class R2Store {
             return 1;
         }
         if(!session.path) {
+            console.log(fs.readdirSync('./').filter(item => {
+                return fs.statSync(path.join('./', item)).isDirectory();
+            }).join(', '));
+            console.log(typeof session);
             console.warn("R2Store.save: the path property is missing");
             return 2;
         }
