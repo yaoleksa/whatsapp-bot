@@ -16,7 +16,15 @@ const client = new Client({
             forcePathStyle: false
         }),
         clientId: process.env.CF_ACCOUNT_ID,
-        backupSyncIntervalMs: 120000
+        backupSyncIntervalMs: 120000,
+        chromiumArgs: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage'
+        ],
+        puppeteer: {
+            userDataDir: '/tmp/wwebjs_temp_session_9fd3499c246edd77ba4eb0c897a7ba4a'
+        }
     }),
     authTimeoutMs: 0,
     webVersionCache: {
@@ -26,6 +34,9 @@ const client = new Client({
     puppeteer: {
         headless: true,
         args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
             '--remote-debugging-port=10000',
             '--remote-debugging-address=0.0.0.0',
             '--disable-cache',
