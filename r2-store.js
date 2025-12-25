@@ -46,18 +46,15 @@ module.exports = class R2Store {
         }
     }
 
-    async save({ clientId, session }) {
+    async save({ session, data }) {
+        console.log({ session, data });
         if(!session) {
-            console.warn("R2Store.save: Invalid path");
+            console.warn('R2Store.save: session is missing!');
             return 1;
         }
-        if(!session.path) {
-            console.log(fs.readdirSync('./').filter(item => {
-                return fs.statSync(path.join('./', item)).isDirectory();
-            }).join(', '));
-            console.log(typeof session);
-            console.warn("R2Store.save: the path property is missing");
-            return 2;
+        if(!data) {
+            console.warn('R2Store.save: data is missing!');
+            return 2; 
         }
         const zip = new AdmZip();
         zip.addLocalFolder(session.path);
