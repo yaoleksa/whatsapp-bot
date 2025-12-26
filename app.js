@@ -1,4 +1,4 @@
-// Make nvironmental variables avaliable
+// Make environmental variables avaliable
 require('dotenv').config();
 
 // Enable required packages
@@ -15,16 +15,8 @@ const client = new Client({
             secretAccessKey: process.env.CF_SECRET_ACCESS_KEY,
             forcePathStyle: false
         }),
-        clientId: process.env.CF_ACCOUNT_ID,
-        backupSyncIntervalMs: 120000,
-        chromiumArgs: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage'
-        ],
-        puppeteer: {
-            userDataDir: '/tmp/wwebjs_temp_session_9fd3499c246edd77ba4eb0c897a7ba4a'
-        }
+        clientId: process.env.CF_CLIENT_ID,
+        backupSyncIntervalMs: 120000
     }),
     authTimeoutMs: 0,
     webVersionCache: {
@@ -42,8 +34,7 @@ const client = new Client({
             '--disable-cache',
             '--disable-application-cache',
             '--disk-cache-size=0',
-            '--aggressive-cache-discard',
-            '--disable-dev-shm-usage'
+            '--aggressive-cache-discard'
         ]
     }
 });
@@ -68,9 +59,11 @@ client.on('message_create', (msg) => {
             'to': msg.to,
             'body': msg.body
         }, {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer your_auth_token_here',
-            'X-Custom-Header': 'my-custom-value'
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer your_auth_token_here',
+                'X-Custom-Header': 'my-custom-value'
+            }
         }).then(res => {
             console.log(`Response status: ${res.status}`);
         });
