@@ -66,6 +66,8 @@ client.on('message_create', (msg) => {
             }
         }).then(res => {
             console.log(`Response status: ${res.status}`);
+        }).catch(err => {
+            console.error(err.message);
         });
     } else {
         console.log('empty message');
